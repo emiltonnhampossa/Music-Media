@@ -4,7 +4,7 @@
       <div class="col">
         <q-input
         bottom-slots
-        v-model="NewTueetContent"
+        v-model="NewTweetContent"
         label="O que estas a Pensar?"
         class="new-tweet"
         counter
@@ -21,7 +21,8 @@
       </div>
       <div class="col col-shrink">
         <q-btn
-          :disable="!NewTueetContent"
+        @click="addNewTweet"
+          :disable="!NewTweetContent"
             unelevated
             rounded
             class="q-mb-lg"
@@ -82,6 +83,7 @@
               />
 
               <q-btn
+              @click="deleteTweet"
               flat
               size="sm"
               round
@@ -103,14 +105,15 @@
 import { defineComponent } from 'vue'
 import { formatDistance} from 'date-fns'
 
+
 export default defineComponent({
   name: 'PageHome',
   data(){
     return{
-      NewTueetContent: '',
+      NewTweetContent: '',
       tweets:[
         {
-          content:'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur nulla officiis et cum eius. Commodi impedit earum illo enim, itaque vitae autem libero non suscipit eos, corrupti velit laudantium perspiciatis!',
+          content:'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Aspernatur nulla officiis et cum eius.',
            date:1682272626235
         },
         {
@@ -121,6 +124,21 @@ export default defineComponent({
       ]
     }
 
+  },
+  methods:{
+    addNewTweet(){
+      let newTweet = {
+        content:this.NewTweetContent,
+        date:Date.now()
+      }
+      this.tweets.unshift(newTweet)
+      this.NewTweetContent= ''
+    },
+    deleteTweet(tweet){
+        let dateToDelete = tweet.date
+        let index = this.tweets.findIndex(tweet => tweet.date === dateToDelete)
+        this.tweets.splice(index, 1)
+    }
   },
   filters:{
     relativeDate(value){
